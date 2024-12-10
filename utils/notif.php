@@ -4,13 +4,12 @@
 * All the functions push notification to Android
 */
 
-const NOTIFICATION_TOPIC = "ALL-DEVICE";
-
 /* Handle submit notif from dashboard page */
-function app_notif_notif_submit($title, $content, $target, $single_regid){
+function app_notif_notif_submit($title, $content, $target, $single_regid, $image){
     $valid_title 	= true;
     $valid_conten 	= true;
     $valid_target 	= true;
+    $valid_image 	= true;
     $total 	        = 1;
 
     if(app_notif_tools_is_empty($title)){
@@ -23,6 +22,11 @@ function app_notif_notif_submit($title, $content, $target, $single_regid){
         $valid_conten = false;
     }
 
+    if(!app_notif_tools_is_empty($image) && !app_notif_tools_validate_url($image)){
+        app_notif_tools_error_msg("Invalid image url.");
+        $valid_image = false;
+    }
+
     if($target === "SINGLE"){
         if(app_notif_tools_is_empty($single_regid)){
             app_notif_tools_error_msg("Device RegId Cannot Empty for Single Device.");
@@ -31,15 +35,15 @@ function app_notif_notif_submit($title, $content, $target, $single_regid){
     } elseif($target === "ALL"){
         $total = app_notif_data_get_all_count();
         if($total <= 0){
-            app_notif_tools_error_msg("You have no app_notif user.");
+            app_notif_tools_error_msg("You have no user.");
             return;
         }
         $single_regid = "";
     }
 
-    if($valid_title && $valid_conten && $valid_target){
-        $message = array( 'title' => $title, 'content' => $content , 'post_id' => -1 );
-        $respon  = app_notif_notif_divide_send($single_regid, $total, $message);
+    if($valid_title && $valid_conten && $valid_target && $valid_image){
+        $message = array( 'title' => $title, 'content' => $content , 'post_id' => -1, 'image' => $image);
+        $respon  = app_notif_notif_prepare_send($single_regid, $message);
 
         if($respon == NULL){
             app_notif_tools_error_msg("Make sure your APP Notif API KEY is correct.");
@@ -48,7 +52,7 @@ function app_notif_notif_submit($title, $content, $target, $single_regid){
 
         $res_msg = '<p>Success : '.$respon['status']. '<br>Message : '.$respon['msg'].'</p>';
         app_notif_tools_success_msg($res_msg);
-        app_notif_data_insert_log($title, $content, $target, "CUSTOM_DASHBOARD", $respon['status']);
+        app_notif_data_insert_log($title, $content, $target, "CUSTOM_DASHBOARD", $respon['status'], $image);
     }
 }
 
@@ -87,7 +91,7 @@ function app_notif_notif_post($new_status, $old_status, $post) {
 
         $respon  = app_notif_notif_prepare_send("", $message);
 
-        app_notif_data_insert_log($title, $content, "ALL", $event, $respon['status']);
+        app_notif_data_insert_log($title, $content, "ALL", $event, $respon['status'], $message['image']);
     }
 }
 
@@ -107,8 +111,6 @@ function get_post_image_thumb($post){
  * Handle notification more than 1000 users
  */
 function app_notif_notif_prepare_send($reg_id, $message) {
-    $options = app_notif_main_get_option();
-
     $data = array('to' => null, 'data' => $message );
 
     if($reg_id != ""){
@@ -120,10 +122,12 @@ function app_notif_notif_prepare_send($reg_id, $message) {
     }
 
     $resp = array('status' => 'SUCCESS', 'msg' => 'Notification sent successfully');
-    if ($reg_id != "" && isset($push_response['results'][0]['error'])){
-        $resp['msg'] = $push_response['results'][0]['error'];
-        $resp['status'] = 'SUCCESS';
+
+    if (isset($push_response['errors'])){
+        $resp['msg'] = $push_response['errors'][0];
+        $resp['status'] = 'FAILED';
     }
+
     return $resp;
 }
 

@@ -151,6 +151,7 @@ class App_notif_Table_Logs_List extends WP_List_Table {
 		echo '.wp-list-table .column-title { width: 15%; }';
 		echo '.wp-list-table .column-content { width: 40%; }';
 		echo '.wp-list-table .column-target { width: 10%; }';
+		echo '.wp-list-table .column-image { width: 10%; }';
 		echo '.wp-list-table .column-event { width: 15%; }';
 		echo '.wp-list-table .column-status { width: 10%; }';
 		echo '.wp-list-table .column-created_at { width: 20%; }';
@@ -165,9 +166,15 @@ class App_notif_Table_Logs_List extends WP_List_Table {
 		case 'content':
 			return $item[$column_name];
 		case 'target':
-			return $item[$column_name];
+			return $item[$column_name];	
+		case 'image':
+			if($item[$column_name] === ''){
+				return '-';	
+			} else {	
+				return "<a href=\"$item[$column_name]\">Open</a>";
+			}
 		case 'event':
-			return $item[$column_name];		
+			return $item[$column_name];	
 		case 'status':
 			return $item[$column_name];
 		case 'created_at':
@@ -190,6 +197,7 @@ class App_notif_Table_Logs_List extends WP_List_Table {
 			$item['title'],
 			$item['content'],
 			$item['target'],
+			$item['image'],
 			$item['event'],
 			$item['status'],
 			$item['created_at'],
@@ -211,6 +219,7 @@ class App_notif_Table_Logs_List extends WP_List_Table {
 			'title'  		=> 'Title',
 			'content'  		=> 'Content',
 			'target' 		=> 'Target',
+			'image' 		=> 'Image',
 			'event' 		=> 'Event',
 			'status' 		=> 'Status',
 			'created_at' 	=> 'Created at'

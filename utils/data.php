@@ -125,6 +125,7 @@ function app_notif_data_init_table_logs(){
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`title` text,
 		`content` text,
+		`image` text,
 		`target` text,
 		`event` text,
 		`success` int(11),
@@ -138,13 +139,14 @@ function app_notif_data_init_table_logs(){
     dbDelta($sql);
 }
 
-function app_notif_data_insert_log($title, $content, $target, $event, $status){
+function app_notif_data_insert_log($title, $content, $target, $event, $status, $image){
     global $wpdb;
     $logs_table = $wpdb->prefix.'app_notif_logs';
     $cur_time = time();
     $wpdb->insert($logs_table , array(
         'title' 	=> $title ,
         'content' 	=> $content,
+        'image' 	=> $image,
         'target' 	=> $target,
         'event' 	=> $event,
         'success' 	=> 0,

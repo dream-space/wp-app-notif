@@ -44,8 +44,12 @@ function app_notif_tools_page_file_path() {
 		include(ROOT_PATH.'/page/page-history.php' );
 	}
 	else {
-		include(ROOT_PATH.'/page/page-dashboard.php' );
+		include(ROOT_PATH.'/page/page-send.php' );
 	}
+}
+
+function app_notif_tools_validate_url($url) {
+    return filter_var($url, FILTER_VALIDATE_URL) !== false;
 }
 
 

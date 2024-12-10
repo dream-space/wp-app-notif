@@ -1,7 +1,7 @@
 <?php
 
 /*
-	Plugin Name: WP APP NOTIF
+	Plugin Name: App Notif
 	Plugin URI: https://github.com/dream-space/wp-app-notif
 	Description: Wordpress Plugin to manage and send Notification for Android App. This plugin could send push notification to android user when add new post or update post.
 	Version: 1.0
@@ -68,10 +68,10 @@ function app_notif_main_deactivation() {
 function app_notif_main_add_menu() {
 	add_menu_page('App Notif', 'App Notif', 'manage_options', 'wp-app-notif-dashboard', 'app_notif_tools_page_file_path', plugins_url('images/wp-app-notif-logo.png', __FILE__) );
 
-	add_submenu_page('wp-app-notif-dashboard', 'WP APP Notif Dashboard',	'Dashboard', 	'manage_options',	'wp-app-notif-dashboard', 'app_notif_tools_page_file_path');
-	add_submenu_page('wp-app-notif-dashboard', 'WP APP Notif Users', 		'Users', 		'manage_options', 	'wp-app-notif-users',   	'app_notif_tools_page_file_path');
-	add_submenu_page('wp-app-notif-dashboard', 'WP APP Notif History', 		'History', 		'manage_options', 	'wp-app-notif-history',   'app_notif_tools_page_file_path');
-	add_submenu_page('wp-app-notif-dashboard', 'WP APP Notif Settings',  	'Settings', 	'manage_options', 	'wp-app-notif-settings',   'app_notif_tools_page_file_path');
+	add_submenu_page('wp-app-notif-dashboard', 'Wp App Notif Send',			'Send Notif', 	'manage_options',	'wp-app-notif-dashboard', 'app_notif_tools_page_file_path');
+	add_submenu_page('wp-app-notif-dashboard', 'Wp App Notif Users', 		'Users', 		'manage_options', 	'wp-app-notif-users',   	'app_notif_tools_page_file_path');
+	add_submenu_page('wp-app-notif-dashboard', 'Wp App Notif History', 		'History', 		'manage_options', 	'wp-app-notif-history',   'app_notif_tools_page_file_path');
+	add_submenu_page('wp-app-notif-dashboard', 'Wp App Notif Settings',  	'Settings', 	'manage_options', 	'wp-app-notif-settings',   'app_notif_tools_page_file_path');
 }
 
 /* Add setting scheme for setting page */
@@ -81,19 +81,19 @@ function app_notif_main_add_setting(){
 
 /* Register query for registration API*/
 function app_notif_main_query_vars($vars){
-	$vars[] = 'api-app-notif';
+	$vars[] = 'wp-app-notif';
 	return $vars;
 }
 
 /**	Handle API Requests for registration user
- *  url     : http://www.domain-wp.com/wp-app-notif=register
+ *  url     : http://www.domain-wp.com?wp-app-notif=register
  *  type    : POST
  *  payload : JSON
  */
 function app_notif_main_parse_requests(){
 	global $wp;
-	if(isset($wp->query_vars['api-app-notif'])){
-		$api_app_notif = $wp->query_vars['api-app-notif'];
+	if(isset($wp->query_vars['wp-app-notif'])){
+		$api_app_notif = $wp->query_vars['wp-app-notif'];
 		if($api_app_notif == 'register'){
 
 			$app_notif_rest = new App_Notif_Rest();

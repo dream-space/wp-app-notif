@@ -2,13 +2,14 @@
 	$target     = 'SINGLE';
     $title 		= "";
     $content 	= "";
+    $image 		= "";
     $s_regid 	= "";
 ?>
 <div class="wrap">
 	
 	<h2 class='opt-title'><span id='icon-options-general' class='app-notif-options'>
 		<img src="<?php echo plugins_url('wp-app_notif/images/wp-app-notif-logo.png');?>" alt=""></span>
-		<?php echo __( 'APP Notif Dashboard', 'app_notif' ); ?>
+		<?php echo __( 'APP Send Notif', 'app_notif' ); ?>
 	</h2>
 	
 	<?php
@@ -16,9 +17,10 @@
 		$title 		= $_POST['notif_title'];
 		$content 	= $_POST['notif_content'];
 		$target 	= $_POST['target'];
+		$image 		= $_POST['image'];
 		$s_regid 	= $_POST['s_reg_id'];
 		$check_box	= ($target == 'SINGLE') ? 'block' : 'none';
-		app_notif_notif_submit($title, $content, $target, $s_regid);
+		app_notif_notif_submit($title, $content, $target, $s_regid, $image);
 	} 
 	?>
 	
@@ -51,9 +53,18 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><i><?php _e('*Please don\'t use HTML','px_gcm'); ?></i><br><br><br></td>
+				<td><i><?php _e('*Please don\'t use HTML','px_gcm'); ?></i><br></td>
 			</tr>
+
+			<tr><td><br></td></tr>
 			
+			<tr>
+				<td><?php _e('Image Url')?> </td>
+				<td><input style="width:300px;" type="text" name="image" value="<?php echo $image; ?>"></td>
+			</tr>
+
+			<tr><td><br><br><br></td></tr>
+
 			<tr>
 				<td><?php _e('Target')?></td>		
 				<td>

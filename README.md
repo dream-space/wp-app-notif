@@ -2,7 +2,7 @@
 WordPress Plugin FCM(Firebase Cloud Messaging) for Android
 
 ## endpoint plugin
-* URL    : www.sample-domain.com/?api-app_notif=register
+* URL    : www.sample-domain.com/?wp-app_notif=register
 * TYPE   : POST
 * HEADER : Content-Type : application/json, Security : YOUR_SECURITY_CODE
 * BODY   : 
